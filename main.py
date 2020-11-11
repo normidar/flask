@@ -1,35 +1,89 @@
-# Copyright 2018 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+from model import *
 
-# [START gae_python38_app]
-from flask import Flask
+# @auth.verify_password
+def verify_password(username_or_token, password = ""):
+    # first try to authenticate by token
+    user = User.verify_auth_token(username_or_token)
+    if not user:
+        # try to authenticate with username/password
+        user = User.query.filter_by(username=username_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+    g.user = user
+    return True
 
-
-# If `entrypoint` is not defined in app.yaml, App Engine will look for an app
-# called `app` in `main.py`.
-app = Flask(__name__)
+# 检查登录状态
+@app.route('/api/v1/auth/check', methods = ['POST'])
+def auth_check():
+    verify_password(request.headers.get('token'))
+    return jsonify({'data': 'Hello, %s!' % g.user.username})
 
 
-@app.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World!'
+# 登录
+@app.route('/api/v1/auth/login', methods = ['POST'])
+def login():
+    username = request.values.get('username')
+    password = request.values.get('password')
+    if username is None or password is None:
+        abort(400)   # missing arguments
+    if verify_password(username, password):
+        return get_auth_token()
+    else:
+        return jsonify({'失败':'fail'})
+
+# 注册
+@app.route('/api/v1/auth/register', methods=['POST'])
+def new_user():
+    username = request.values.get('username')
+    password = request.values.get('password')
+    if username is None or password is None:
+        abort(400)    # missing arguments
+    if User.query.filter_by(username=username).first() is not None:
+        abort(400)    # existing user
+    user = User(username=username)
+    user.hash_password(password)
+    db.session.add(user)
+    db.session.commit()
+    return (jsonify({'username': user.username}), 201,
+            {'Location': url_for('get_user', id=user.id, _external=True)})
+
+# 创建文章
+@app.route('/api/v1/article/create', methods=['POST'])
+def article_create():
+    title = request.values.get('title')
+    content = request.values.get('content')
+    # 登录了才可以录入
+    if verify_password(request.headers.get('token')):
+        owner = g.user.id
+        article = Article(title=title, content=content, owner=owner)
+        db.session.add(article)
+        db.session.commit()
+        return jsonify({'success':"success"})
+    else:
+        return jsonify({'fail':'fail'})
+
+@app.route('/api/users/<int:id>')
+def get_user(id):
+    user = User.query.get(id)
+    if not user:
+        abort(400)
+    return jsonify({'username': user.username})
+
+
+# @app.route('/api/token')
+# @auth.login_required
+def get_auth_token():
+    token = g.user.generate_auth_token(600)
+    return jsonify({'token': token.decode('ascii'), 'duration': 600})
+
+
+@app.route('/api/resource', methods=['POST'])
+# @auth.login_required
+def get_resource():
+    return jsonify({'data': 'Hello, %s!' % g.user.username})
 
 
 if __name__ == '__main__':
-    # This is used when running locally only. When deploying to Google App
-    # Engine, a webserver process such as Gunicorn will serve the app. This
-    # can be configured by adding an `entrypoint` to app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
-# [END gae_python38_app]
+    if not os.path.exists('db.sqlite'):
+        db.create_all()
+    app.run(debug=True)
