@@ -45,10 +45,15 @@ class User(db.Model):
             return
         return User.query.get(data['id'])
 
-
 class Article(db.Model):
     __tablename__ = 'articles'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(64), index=True)
-    owner = db.Column(db.Integer,index=True)
-    content = db.Column(db.String(128))
+    id      = db.Column(db.Integer, primary_key=True)
+    title   = db.Column(db.String(64), index=True)
+    link_id = db.Column(db.Integer, index=True)
+    owner   = db.Column(db.Integer,index=True)
+    content = db.Column(db.String())
+
+class Tree(db.Model):
+    __tablename__ = 'trees'
+    id   = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String(255))

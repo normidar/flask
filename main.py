@@ -1,4 +1,7 @@
+from flasgger import Swagger,swag_from
 from model import *
+
+swagger = Swagger(app)
 
 # @auth.verify_password
 def verify_password(username_or_token, password = ""):
@@ -33,7 +36,17 @@ def login():
 
 # 注册
 @app.route('/api/v1/auth/register', methods=['POST'])
+@swag_from('doc/file.yml')
 def new_user():
+    """
+    Create a new user
+
+    blah blah
+
+    swagger_from_file: path/to/file.yml
+
+    blah blah
+    """
     username = request.values.get('username')
     password = request.values.get('password')
     if username is None or password is None:
@@ -52,15 +65,68 @@ def new_user():
 def article_create():
     title = request.values.get('title')
     content = request.values.get('content')
+    link_id = request.values.get('link_id')
     # 登录了才可以录入
     if verify_password(request.headers.get('token')):
         owner = g.user.id
-        article = Article(title=title, content=content, owner=owner)
+        article = Article(title=title, content=content, owner=owner, link_id=link_id)
         db.session.add(article)
         db.session.commit()
         return jsonify({'success':"success"})
     else:
         return jsonify({'fail':'fail'})
+
+# 删除文章 创建post 修改put 删除delete 获取get
+@app.route('/api/v1/article/delete', methods= ['DELETE'])
+def article_delete():
+    id = request.values.get('id')
+    if verify_password(request.headers.get('token')):
+        article = Article.query.filter_by(id=id).first()
+        if article.owner == g.user.id:
+            Article.query.filter_by(id=id).delete()
+            db.session.commit()
+            return jsonify({'success': '成功删除'})
+        else:
+            return jsonify({'fail':'只能删除自己的'})
+    else:
+        return jsonify({'fail':'请先登录'})
+
+# 修改文章
+@app.route('/api/v1/article/update', methods=['PUT'])
+def article_update():
+    id = request.values.get('id')
+    title = request.values.get('title')
+    content = request.values.get('content')
+    link_id = request.values.get('link_id')
+    # 登录了才可以录入
+    if verify_password(request.headers.get('token')):
+        insert_map = {}
+        if title != "": insert_map['title'] = title
+        if content != "": insert_map['content'] = content
+        if link_id != "": insert_map['link_id'] = link_id
+        # 
+        article = Article.query.filter_by(id=id).first()
+        if article.owner == g.user.id:
+            Article.query.filter_by(id=id).update(insert_map)
+            db.session.commit()
+            return jsonify({'success': '成功更改'})
+        else:
+            return jsonify({'fail':'只能更改自己的'})
+    else:
+        return jsonify({'fail':'请先登录'})
+
+# 获取文章列表
+@app.route('/api/v1/article/view', methods = ['POST'])
+def article_view():
+    if verify_password(request.headers.get('token')):
+        userid = g.user.id
+        all_articles = Article.query.filter_by(owner=userid).all()
+        return jsonify([(x.id,x.title) for x in all_articles])
+    else:
+        return jsonify({'aa','bb'})
+        # with open('tree.json','r') as f:
+        #     return f.read()
+
 
 @app.route('/api/users/<int:id>')
 def get_user(id):
@@ -83,7 +149,19 @@ def get_resource():
     return jsonify({'data': 'Hello, %s!' % g.user.username})
 
 
+
+@app.route("/spec")
+def spec():
+    swag = swagger(app)
+    swag['info']['version'] = "1.0"
+    swag['info']['title'] = "My API"
+    return jsonify(swag)
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 if __name__ == '__main__':
-    if not os.path.exists('db.sqlite'):
-        db.create_all()
+    # if not os.path.exists('db.sqlite'):
+    #     db.create_all()
     app.run(debug=True)
