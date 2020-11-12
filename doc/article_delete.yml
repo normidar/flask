@@ -1,0 +1,18 @@
+删除文章
+---
+tags:
+  - ARTICLE
+parameters:
+  - in: body
+    name: body
+    schema:
+      id: id
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: 文章id
+responses:
+  200:
+    description: User created

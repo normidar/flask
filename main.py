@@ -17,6 +17,7 @@ def verify_password(username_or_token, password = ""):
 
 # 检查登录状态
 @app.route('/api/v1/auth/check', methods = ['POST'])
+@swag_from('doc/auth_check.yml')
 def auth_check():
     verify_password(request.headers.get('token'))
     return jsonify({'data': 'Hello, %s!' % g.user.username})
@@ -24,6 +25,7 @@ def auth_check():
 
 # 登录
 @app.route('/api/v1/auth/login', methods = ['POST'])
+@swag_from('doc/auth_login.yml')
 def login():
     username = request.values.get('username')
     password = request.values.get('password')
@@ -36,17 +38,8 @@ def login():
 
 # 注册
 @app.route('/api/v1/auth/register', methods=['POST'])
-@swag_from('doc/file.yml')
+@swag_from('doc/auth_register.yml')
 def new_user():
-    """
-    Create a new user
-
-    blah blah
-
-    swagger_from_file: path/to/file.yml
-
-    blah blah
-    """
     username = request.values.get('username')
     password = request.values.get('password')
     if username is None or password is None:
@@ -62,6 +55,7 @@ def new_user():
 
 # 创建文章
 @app.route('/api/v1/article/create', methods=['POST'])
+@swag_from('doc/article_create.yml')
 def article_create():
     title = request.values.get('title')
     content = request.values.get('content')
@@ -78,6 +72,7 @@ def article_create():
 
 # 删除文章 创建post 修改put 删除delete 获取get
 @app.route('/api/v1/article/delete', methods= ['DELETE'])
+@swag_from('doc/article_delete.yml')
 def article_delete():
     id = request.values.get('id')
     if verify_password(request.headers.get('token')):
@@ -93,6 +88,7 @@ def article_delete():
 
 # 修改文章
 @app.route('/api/v1/article/update', methods=['PUT'])
+@swag_from('doc/article_update.yml')
 def article_update():
     id = request.values.get('id')
     title = request.values.get('title')

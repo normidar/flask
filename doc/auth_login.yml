@@ -1,0 +1,12 @@
+登录
+---
+tags:
+  - AUTH
+parameters:
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/User"
+responses:
+  200:
+    description: User created

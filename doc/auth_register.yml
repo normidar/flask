@@ -1,0 +1,45 @@
+注册
+---
+tags:
+  - AUTH
+parameters:
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/User"
+responses:
+  200:
+    description: "{token}"
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      username:
+        type: "string"
+      password:
+        type: "string"
+    xml:
+      name: "User"
+  Article:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+      context:
+        type: "string"
+      link_id:
+        type: "integer"
+      owner:
+        type: "integer"
+  Tree:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+      

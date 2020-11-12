@@ -1,0 +1,12 @@
+检查登录状态
+---
+tags:
+  - AUTH
+parameters:
+  - name: token
+    in: header
+    #参数描述
+    description: token来查看登录状况
+responses:
+  200:
+    description: {token}

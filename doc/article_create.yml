@@ -1,0 +1,12 @@
+创建文章
+---
+tags:
+  - ARTICLE
+parameters:
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/Article"
+responses:
+  200:
+    description: User created
