@@ -1,31 +1,11 @@
 #!/usr/bin/env python
 import os
 import time
-from flask import Flask, abort, request, jsonify, g, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_httpauth import HTTPBasicAuth
-from flasgger import Swagger,swag_from
+from flask import Flask
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
+from apps import db, app
 
-import os
-
-# cwd = os.getcwd()  # Get the current working directory (cwd)
-# files = os.listdir(cwd)  # Get all the files in that directory
-# print("Files in %r: %s" % (cwd, files))
-# print("--------------------------------")
-# initialization
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy dog'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-
-# extensions
-db = SQLAlchemy(app)
-auth = HTTPBasicAuth()
-
-# swagger
-swagger = Swagger(app)
 
 class User(db.Model):
     __tablename__ = 'users'

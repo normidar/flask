@@ -1,9 +1,14 @@
-from model import app
-from auth import *
+from flask import Blueprint, jsonify, request, abort, g,url_for
+from flasgger import swag_from
 
+from apps import db
+from apps.models.models import Article
+from apps.auth.auth import verify_password
+
+bp = Blueprint('article', __name__)
 # 创建文章
-@app.route('/api/v1/article/create', methods=['POST'])
-@swag_from('doc/article_create.yml')
+@bp.route('/create', methods=['POST'])
+@swag_from('../doc/article_create.yml')
 def article_create():
     title = request.values.get('title')
     content = request.values.get('content')
@@ -19,8 +24,8 @@ def article_create():
         return jsonify({'fail':'fail'})
 
 # 删除文章 创建post 修改put 删除delete 获取get
-@app.route('/api/v1/article/delete', methods= ['DELETE'])
-@swag_from('doc/article_delete.yml')
+@bp.route('/delete', methods= ['DELETE'])
+@swag_from('../doc/article_delete.yml')
 def article_delete():
     id = request.values.get('id')
     if verify_password(request.headers.get('token')):
@@ -35,8 +40,8 @@ def article_delete():
         return jsonify({'fail':'请先登录'})
 
 # 修改文章
-@app.route('/api/v1/article/update', methods=['PUT'])
-@swag_from('doc/article_update.yml')
+@bp.route('/update', methods=['PUT'])
+@swag_from('../doc/article_update.yml')
 def article_update():
     id = request.values.get('id')
     title = request.values.get('title')
@@ -60,7 +65,7 @@ def article_update():
         return jsonify({'fail':'请先登录'})
 
 # 获取文章列表
-@app.route('/api/v1/article/view', methods = ['POST'])
+@bp.route('/view', methods = ['POST'])
 def article_view():
     if verify_password(request.headers.get('token')):
         userid = g.user.id

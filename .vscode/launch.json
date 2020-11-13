@@ -20,5 +20,9 @@
             ],
             "jinja": true
         }
+    ],
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint-flask"
     ]
 }

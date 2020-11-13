@@ -1,4 +1,11 @@
-from model import *
+from flask import Blueprint, jsonify, request, abort, g,url_for
+from flasgger import swag_from
+
+from apps import db
+from apps.models.models import User
+
+
+bp = Blueprint('auth', __name__)
 
 # @auth.verify_password
 def verify_password(username_or_token, password = ""):
@@ -13,16 +20,16 @@ def verify_password(username_or_token, password = ""):
     return True
 
 # 检查登录状态
-@app.route('/api/v1/auth/check', methods = ['POST'])
-@swag_from('doc/auth_check.yml')
+@bp.route('/check', methods = ['POST'])
+@swag_from('../doc/auth_check.yml')
 def auth_check():
     verify_password(request.headers.get('token'))
     return jsonify({'data': 'Hello, %s!' % g.user.username})
 
 
 # 登录
-@app.route('/api/v1/auth/login', methods = ['POST'])
-@swag_from('doc/auth_login.yml')
+@bp.route('/login', methods = ['POST'])
+@swag_from('../doc/auth_login.yml')
 def login():
     username = request.values.get('username')
     password = request.values.get('password')
@@ -39,8 +46,8 @@ def get_auth_token():
 
 
 # 注册
-@app.route('/api/v1/auth/register', methods=['POST'])
-@swag_from('doc/auth_register.yml')
+@bp.route('/register', methods=['POST'])
+@swag_from('../doc/auth_register.yml')
 def new_user():
     username = request.values.get('username')
     password = request.values.get('password')
@@ -52,5 +59,4 @@ def new_user():
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
-    return (jsonify({'username': user.username}), 201,
-            {'Location': url_for('get_user', id=user.id, _external=True)})
+    return jsonify({'success': user.username})

@@ -1,17 +1,26 @@
-from model import *
+from flask import Blueprint, jsonify, request, abort, g,url_for
+from flasgger import swag_from
+
+from apps import db
+from apps.models.models import Article
+from apps.auth.auth import verify_password
 import json
+
+path = 'tree.json'
+
+bp = Blueprint('tree', __name__)
 # 創建tree
-@app.route('/api/v1/tree/create', methods= ['POST'])
+@bp.route('/create', methods= ['POST'])
 def tree_create():
     id = int(request.values.get('id'))
     name = request.values.get('name')
     json_str = ""
-    with open('codes/tree.json','r') as f:
+    with open(path,'r') as f:
         json_str = f.read()
     tree_map = json.loads(json_str)
     create_tree(tree_map, id,name,tree_map['max']+1)
     tree_map['max']+=1
-    with open('codes/tree.json','w') as f:
+    with open(path,'w') as f:
         f.write(json.dumps(tree_map))
     # return jsonify(find_tree_id(tree_map, id))
     return jsonify(tree_map)
@@ -40,9 +49,9 @@ def create_tree(tree_map:dict,id,insert_name,insert_id):
     return None
 
 # 查看树
-@app.route('/api/v1/tree/view', methods= ['POST','GET'])
+@bp.route('/view', methods= ['POST','GET'])
 def tree_view():
-    with open('codes/tree.json','r') as f:
+    with open(path,'r') as f:
         return f.read()
     
 
