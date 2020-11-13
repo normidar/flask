@@ -9,4 +9,4 @@ parameters:
       $ref: "#/definitions/Article"
 responses:
   200:
-    description: User created
+    description: 文章創建成功
