@@ -1,4 +1,4 @@
-删除文章
+利用文章ID删除文章
 ---
 tags:
   - ARTICLE
@@ -12,7 +12,7 @@ parameters:
       properties:
         id:
           type: integer
-          description: 文章id
+          description: id
 responses:
   200:
-    description: User created
+    description: 削除成功
