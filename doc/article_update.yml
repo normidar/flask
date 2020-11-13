@@ -1,4 +1,4 @@
-更新文章
+利用文章ID和其他更新文章、不需要userID
 ---
 tags:
   - ARTICLE
@@ -9,4 +9,4 @@ parameters:
       $ref: "#/definitions/Article"
 responses:
   200:
-    description: User created
+    description: 文章創建成功
