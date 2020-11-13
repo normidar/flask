@@ -122,8 +122,10 @@ def article_view():
         return jsonify({'aa','bb'})
         # with open('tree.json','r') as f:
         #     return f.read()
-
-
+# 創建tree
+def tree_create():
+    pass
+    
 @app.route('/api/users/<int:id>')
 def get_user(id):
     user = User.query.get(id)
