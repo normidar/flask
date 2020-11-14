@@ -20,12 +20,12 @@ def verify_password(username_or_token, password = ""):
     g.user = user
     return True
 
-# 检查登录状态
-@bp.route('/check', methods = ['POST'])
-@swag_from(doc_path + '/auth_check.yml')
-def auth_check():
-    verify_password(request.headers.get('token'))
-    return jsonify({'data': 'Hello, %s!' % g.user.username})
+# # 检查登录状态
+# @bp.route('/check', methods = ['POST'])
+# @swag_from(doc_path + '/auth_check.yml')
+# def auth_check():
+#     verify_password(request.headers.get('token'))
+#     return jsonify({'data': 'Hello, %s!' % g.user.username})
 
 
 # 登录
@@ -61,3 +61,13 @@ def new_user():
     db.session.add(user)
     db.session.commit()
     return jsonify({'success': user.username})
+
+#是否已注册
+# 注册
+@bp.route('/rcheck', methods=['POST'])
+@swag_from(doc_path + '/auth_check.yml')
+def check_user():
+    username = request.values.get('username')
+    if User.query.filter_by(username=username).first() is not None:
+        return jsonify({'fail':'name already'})
+    return jsonify({'success': 'can use!'})
