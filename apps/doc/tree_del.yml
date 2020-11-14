@@ -1,7 +1,7 @@
-利用文章ID删除文章
+删除分支
 ---
 tags:
-  - ARTICLE
+  - CATEGORY
 parameters:
   - in: body
     name: body

@@ -31,15 +31,23 @@ definitions:
         type: "string"
       context:
         type: "string"
-      link_id:
+      category_id:
         type: "integer"
+        description: "分类的id"
       owner:
         type: "integer"
+        description: "用户id,不用传入,自动获取"
   Tree:
     type: "object"
     properties:
       id:
         type: "integer"
-      title:
+      name:
         type: "string"
+  Id:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "只需要id"
       

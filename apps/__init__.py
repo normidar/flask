@@ -11,11 +11,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 url_prefix = '/api/v1'
-import apps.auth.auth as auth
+import apps.engines.auth as auth
 app.register_blueprint(auth.bp,url_prefix=url_prefix+'/auth')
-import apps.article.article as article
+import apps.engines.article as article
 app.register_blueprint(article.bp,url_prefix=url_prefix+'/article')
-import apps.tree.tree as tree
+import apps.engines.tree as tree
 app.register_blueprint(tree.bp,url_prefix=url_prefix+'/tree')
 
 @app.route("/")

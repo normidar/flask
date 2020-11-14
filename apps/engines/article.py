@@ -3,7 +3,7 @@ from flasgger import swag_from
 
 from apps import db
 from apps.models.models import Article
-from apps.auth.auth import verify_password
+from apps.engines.auth import verify_password
 
 bp = Blueprint('article', __name__)
 # 创建文章
@@ -12,7 +12,7 @@ bp = Blueprint('article', __name__)
 def article_create():
     title = request.values.get('title')
     content = request.values.get('content')
-    link_id = request.values.get('link_id')
+    link_id = request.values.get('category_id')
     # 登录了才可以录入
     if verify_password(request.headers.get('token')):
         owner = g.user.id
