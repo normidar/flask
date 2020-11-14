@@ -63,8 +63,7 @@ def new_user():
     return jsonify({'success': user.username})
 
 #是否已注册
-# 注册
-@bp.route('/rcheck', methods=['POST'])
+@bp.route('/check', methods=['GET'])
 @swag_from(doc_path + '/auth_check.yml')
 def check_user():
     username = request.values.get('username')

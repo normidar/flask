@@ -6,9 +6,11 @@ from apps.models.models import Article
 from apps.engines.auth import verify_password
 
 bp = Blueprint('article', __name__)
+doc_path = '../doc/article/'
+
 # 创建文章
 @bp.route('/create', methods=['POST'])
-@swag_from('../doc/article_create.yml')
+@swag_from( doc_path+'article_create.yml')
 def article_create():
     title = request.values.get('title')
     content = request.values.get('content')
@@ -25,7 +27,7 @@ def article_create():
 
 # 删除文章 创建post 修改put 删除delete 获取get
 @bp.route('/delete', methods= ['DELETE'])
-@swag_from('../doc/article_delete.yml')
+@swag_from(doc_path+'article_delete.yml')
 def article_delete():
     id = request.values.get('id')
     if verify_password(request.headers.get('token')):
@@ -41,7 +43,7 @@ def article_delete():
 
 # 修改文章
 @bp.route('/update', methods=['PUT'])
-@swag_from('../doc/article_update.yml')
+@swag_from(doc_path+'article_update.yml')
 def article_update():
     id = request.values.get('id')
     title = request.values.get('title')
@@ -65,7 +67,8 @@ def article_update():
         return jsonify({'fail':'请先登录'})
 
 # 获取文章列表
-@bp.route('/view', methods = ['POST'])
+@bp.route('/view', methods = ['GET'])
+@swag_from(doc_path+'article_view.yml')
 def article_view():
     if verify_password(request.headers.get('token')):
         userid = g.user.id
