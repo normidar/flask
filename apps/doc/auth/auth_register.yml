@@ -16,6 +16,7 @@ definitions:
     properties:
       id:
         type: "integer"
+        description: "注册时不用"
       username:
         type: "string"
       password:

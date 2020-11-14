@@ -55,7 +55,7 @@ def new_user():
     if username is None or password is None:
         abort(400)    # missing arguments
     if User.query.filter_by(username=username).first() is not None:
-        abort(400)    # existing user
+        return jsonify({'fail':'name already'})
     user = User(username=username,character_id = 2)
     user.hash_password(password)
     db.session.add(user)

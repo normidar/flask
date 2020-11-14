@@ -1,0 +1,12 @@
+删除角色
+---
+tags:
+  - CHARACTER
+parameters:
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/Id"
+responses:
+  200:
+    description: 成功

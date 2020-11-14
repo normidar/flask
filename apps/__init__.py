@@ -16,7 +16,7 @@ app.register_blueprint(auth.bp,url_prefix=url_prefix+'/auth')
 import apps.engines.article as article
 app.register_blueprint(article.bp,url_prefix=url_prefix+'/article')
 import apps.engines.tree as tree
-app.register_blueprint(tree.bp,url_prefix=url_prefix+'/tree')
+app.register_blueprint(tree.bp,url_prefix=url_prefix+'/category')
 
 @app.route("/")
 def normal():

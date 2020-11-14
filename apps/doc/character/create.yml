@@ -1,0 +1,12 @@
+创建角色
+---
+tags:
+  - CHARACTER
+parameters:
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/Character"
+responses:
+  200:
+    description: 成功
