@@ -6,6 +6,7 @@ from apps.models.models import User
 
 
 bp = Blueprint('auth', __name__)
+doc_path = '../doc/auth'
 
 # @auth.verify_password
 def verify_password(username_or_token, password = ""):
@@ -21,7 +22,7 @@ def verify_password(username_or_token, password = ""):
 
 # 检查登录状态
 @bp.route('/check', methods = ['POST'])
-@swag_from('../doc/auth_check.yml')
+@swag_from(doc_path + '/auth_check.yml')
 def auth_check():
     verify_password(request.headers.get('token'))
     return jsonify({'data': 'Hello, %s!' % g.user.username})
@@ -29,7 +30,7 @@ def auth_check():
 
 # 登录
 @bp.route('/login', methods = ['POST'])
-@swag_from('../doc/auth_login.yml')
+@swag_from(doc_path + '/auth_login.yml')
 def login():
     username = request.values.get('username')
     password = request.values.get('password')
@@ -47,7 +48,7 @@ def get_auth_token():
 
 # 注册
 @bp.route('/register', methods=['POST'])
-@swag_from('../doc/auth_register.yml')
+@swag_from(doc_path + '/auth_register.yml')
 def new_user():
     username = request.values.get('username')
     password = request.values.get('password')
@@ -55,7 +56,7 @@ def new_user():
         abort(400)    # missing arguments
     if User.query.filter_by(username=username).first() is not None:
         abort(400)    # existing user
-    user = User(username=username)
+    user = User(username=username,character_id = 2)
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()

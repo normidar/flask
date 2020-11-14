@@ -60,6 +60,7 @@ def tree_view():
 
 # 削除tree
 @bp.route('/del', methods= ['DELETE'])
+@swag_from(swag_path+'del.yml')
 def tree_delete():
     id = int(request.values.get('id'))
     with open(path,'r') as f:
@@ -91,6 +92,7 @@ def del_tree(tree_map:dict,id):
 
 # 更改tree
 @bp.route('/update', methods= ['PUT'])
+@swag_from(swag_path+'update.yml')
 def tree_update():
     id = int(request.values.get('id'))
     name = request.values.get('name')

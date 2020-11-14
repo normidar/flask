@@ -24,4 +24,23 @@ def normal():
 
 @app.before_first_request
 def create_tables():
+    from apps.models.models import User,Character
     db.create_all()
+    # 创建管理员角色
+    admin_chara = Character(
+        name='admin',
+        can_edit_article = True,
+        can_edit_character = True,
+        can_edit_tree = True,
+    )
+    db.session.add(admin_chara)
+    normal_chara = Character(
+        name='normal',
+    )
+    db.session.add(normal_chara)
+    # 创建超级用户
+    admin_user = User(username='admin',character_id = 1)
+    admin_user.hash_password('admin')
+    db.session.add(admin_user)
+    db.session.commit()
+    

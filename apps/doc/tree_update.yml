@@ -1,0 +1,13 @@
+更改分类名称
+---
+tags:
+  - CATEGORY
+parameters:
+  - in: body
+    name: body
+    description: token来查看登录状况
+    schema:
+      $ref: "#/definitions/Tree"
+responses:
+  200:
+    description: 成功

@@ -44,6 +44,20 @@ definitions:
         type: "integer"
       name:
         type: "string"
+  Character:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      can_edit_character:
+        type: "boolean"
+        description: "这项暂不能编辑,只能读取,默认为false"
+      can_edit_tree:
+        type: "boolean"
+      can_edit_article:
+        type: "boolean"
   Id:
     type: "object"
     properties:

@@ -12,7 +12,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)
     password_hash = db.Column(db.String(128))
-
+    character_id = db.Column(db.Integer)
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -32,6 +32,14 @@ class User(db.Model):
         except:
             return
         return User.query.get(data['id'])
+
+class Character(db.Model):
+    __tablename__ = 'characters'
+    id                 = db.Column(db.Integer, primary_key=True)
+    name               = db.Column(db.String(64), index=True)
+    can_edit_character = db.Column(db.Boolean, default=False)
+    can_edit_tree      = db.Column(db.Boolean, default=False)
+    can_edit_article   = db.Column(db.Boolean, default=True)
 
 class Article(db.Model):
     __tablename__ = 'articles'
