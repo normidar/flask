@@ -68,5 +68,5 @@ def new_user():
 def check_user():
     username = request.values.get('username')
     if User.query.filter_by(username=username).first() is not None:
-        return jsonify({'fail':'name already'})
-    return jsonify({'success': 'can use!'})
+        return abort(200)
+    return abort(404)
