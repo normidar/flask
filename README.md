@@ -15,3 +15,7 @@ screen -d -r [pid(名字前的数字)]  //进入screen tt
 
 > ctrl a d 退出screen
 > exit 关闭screen窗口
+
+# git 强制更新
+git fetch --all
+git reset --hard origin/master

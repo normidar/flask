@@ -24,7 +24,9 @@ def normal():
 
 @app.before_first_request
 def create_tables():
-    from apps.models.models import User,Character
+    from apps.models.models import User
+    from apps.models.character import Character
+
     db.create_all()
     # 创建管理员角色
     admin_chara = Character(
