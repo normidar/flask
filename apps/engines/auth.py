@@ -53,7 +53,7 @@ def new_user():
     username = request.values.get('username')
     password = request.values.get('password')
     if username is None or password is None:
-        abort(400)    # missing arguments
+        return jsonify({'fail':'has not some thing'})
     if User.query.filter_by(username=username).first() is not None:
         return jsonify({'fail':'name already'})
     user = User(username=username,character_id = 2)
@@ -68,5 +68,5 @@ def new_user():
 def check_user():
     username = request.values.get('username')
     if User.query.filter_by(username=username).first() is not None:
-        return abort(200)
+        return "200"
     return abort(404)

@@ -4,12 +4,27 @@ from flasgger import swag_from
 from apps import db
 from apps.models.models import Article
 from apps.engines.auth import verify_password
+from apps.models.character import Character
 import json
 
 path = 'tree.json'
-swag_path = '../doc/tree_'
+swag_path = '../doc/tree/'
 
 bp = Blueprint('tree', __name__)
+
+# 验证控制权
+def check_ability():
+    if verify_password(request.headers.get('token')):
+        chara_id = g.user.character_id
+        chara = Character.query.filter_by(id=chara_id).one()
+        if chara_id==1:
+            return True
+        elif chara_id == 2:
+            return False
+        elif chara.check_can('can_edit_tree'):
+            return True
+    return False
+
 # 創建tree
 @bp.route('/create', methods= ['POST'])
 @swag_from(swag_path+'create.yml')

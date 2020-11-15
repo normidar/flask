@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, g
 from flasgger import swag_from
 
 from apps import db
-from apps.models.models import Character
+from apps.models.character import Character
 from apps.engines.auth import verify_password
 
 bp = Blueprint('character', __name__)
