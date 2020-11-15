@@ -16,7 +16,9 @@ app.register_blueprint(auth.bp,url_prefix=url_prefix+'/auth')
 import apps.engines.article as article
 app.register_blueprint(article.bp,url_prefix=url_prefix+'/article')
 import apps.engines.tree as tree
-app.register_blueprint(tree.bp,url_prefix=url_prefix+'/category')
+app.register_blueprint(tree.bp,url_prefix=url_prefix+'/tree')
+import apps.engines.character as character
+app.register_blueprint(character.bp,url_prefix=url_prefix+'/character')
 
 @app.route("/")
 def normal():
@@ -29,20 +31,22 @@ def create_tables():
 
     db.create_all()
     # 创建管理员角色
-    admin_chara = Character(
-        name='admin',
-        can_edit_article = True,
-        can_edit_character = True,
-        can_edit_tree = True,
-    )
-    db.session.add(admin_chara)
-    normal_chara = Character(
-        name='normal',
-    )
-    db.session.add(normal_chara)
-    # 创建超级用户
-    admin_user = User(username='admin',character_id = 1)
-    admin_user.hash_password('admin')
-    db.session.add(admin_user)
-    db.session.commit()
+    rows = db.session.query(User).count()
+    if rows == 0:
+        admin_chara = Character(
+            name='admin',
+            can_edit_article = True,
+            can_edit_character = True,
+            can_edit_tree = True,
+        )
+        db.session.add(admin_chara)
+        normal_chara = Character(
+            name='normal',
+        )
+        db.session.add(normal_chara)
+        # 创建超级用户
+        admin_user = User(username='admin',character_id = 1)
+        admin_user.hash_password('admin')
+        db.session.add(admin_user)
+        db.session.commit()
     

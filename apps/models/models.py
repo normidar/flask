@@ -40,8 +40,3 @@ class Article(db.Model):
     link_id = db.Column(db.Integer, index=True)
     owner   = db.Column(db.Integer,index=True)
     content = db.Column(db.String())
-
-class Tree(db.Model):
-    __tablename__ = 'trees'
-    id   = db.Column(db.Integer, primary_key=True)
-    link = db.Column(db.String(255))

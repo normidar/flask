@@ -6,10 +6,10 @@ from apps.models.character import Character
 from apps.engines.auth import verify_password
 
 bp = Blueprint('character', __name__)
-swag_path = '../doc/character_'
+swag_path = '../doc/character/'
 # 创建角色
 @bp.route('/create', methods=['POST'])
-# @swag_from(swag_path+'create.yml')
+@swag_from(swag_path+'create.yml')
 def character_create():
     name = request.values.get('name')
     can_edit_article = request.values.get('can_edit_article')
@@ -19,12 +19,12 @@ def character_create():
         if g.user.character_id == 1:
             new_chara = Character(
                 name = name,
-                can_edit_article = can_edit_article,
-                can_edit_tree = can_edit_tree,
+                can_edit_article = bool(can_edit_article),
+                can_edit_tree = bool(can_edit_tree),
             )
             db.session.add(new_chara)
             db.session.commit()
-            return jsonify({'success':name})
+            return jsonify({'success':can_edit_article})
         else:
             return jsonify({'fail':'you are a low low'})
     else:
@@ -32,7 +32,7 @@ def character_create():
 
 # 删除角色
 @bp.route('/del', methods=['DELETE'])
-# @swag_from(swag_path+'del.yml')
+@swag_from(swag_path+'del.yml')
 def character_del():
     id = request.values.get('id')
     # 登录了才可以
@@ -51,7 +51,7 @@ def character_del():
 
 #更改角色
 @bp.route('/update', methods=['PUT'])
-# @swag_from(swag_path+'update.yml')
+@swag_from(swag_path+'update.yml')
 def character_update():
     id = request.values.get('id')
     name = request.values.get('name')

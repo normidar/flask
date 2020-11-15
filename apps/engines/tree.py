@@ -29,18 +29,21 @@ def check_ability():
 @bp.route('/create', methods= ['POST'])
 @swag_from(swag_path+'create.yml')
 def tree_create():
-    id = int(request.values.get('id'))
-    name = request.values.get('name')
-    # json_str = ""
-    with open(path,'r') as f:
-        json_str = f.read()
-    tree_map = json.loads(json_str)
-    create_tree(tree_map, id,name,tree_map['max']+1)
-    tree_map['max']+=1
-    with open(path,'w') as f:
-        f.write(json.dumps(tree_map))
-    # return jsonify(find_tree_id(tree_map, id))
-    return jsonify(tree_map)
+    if check_ability():
+        id = int(request.values.get('id'))
+        name = request.values.get('name')
+        # json_str = ""
+        with open(path,'r') as f:
+            json_str = f.read()
+        tree_map = json.loads(json_str)
+        create_tree(tree_map, id,name,tree_map['max']+1)
+        tree_map['max']+=1
+        with open(path,'w') as f:
+            f.write(json.dumps(tree_map))
+        # return jsonify(find_tree_id(tree_map, id))
+        return jsonify(tree_map)
+    else:
+        return jsonify({'fail':'this character can not create'})
 
 # def find_tree_id(tree_map:dict,id):
 #     for k in tree_map.keys():

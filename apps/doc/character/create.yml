@@ -6,6 +6,7 @@ parameters:
   - in: body
     name: body
     schema:
+      description: "传入空字符串表示false,否则为true,需要全部值都传入"
       $ref: "#/definitions/Character"
 responses:
   200:

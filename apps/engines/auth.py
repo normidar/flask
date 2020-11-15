@@ -71,6 +71,8 @@ def check_user():
         return "200"
     return abort(404)
 
+
+# 测试接口
 @bp.route('/test', methods=['POST'])
 def test():
     return jsonify(request.values.dicts)
