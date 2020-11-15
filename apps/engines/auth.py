@@ -70,3 +70,7 @@ def check_user():
     if User.query.filter_by(username=username).first() is not None:
         return "200"
     return abort(404)
+
+@bp.route('/test', methods=['POST'])
+def test():
+    return jsonify(request.values.dicts)
