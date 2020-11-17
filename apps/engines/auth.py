@@ -34,9 +34,12 @@ def verify_password(username_or_token, password = ""):
     return True
 
 # 更改用户信息
+@bp.route('/update', methods = ['PUT'])
 def user_update():
+    # need change user
     id = request.values.get('id')
     chara_id = request.values.get('chara_id')
+    # now user ability
     if check_ability() and id is not None and chara_id is not None:
         User.query.filter_by(id=id).update({'character_id':chara_id})
         return jsonify({'message':'success'})
