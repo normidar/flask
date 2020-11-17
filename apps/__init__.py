@@ -20,6 +20,8 @@ app.register_blueprint(tree.bp,url_prefix=url_prefix+'/tree')
 import apps.engines.character as character
 app.register_blueprint(character.bp,url_prefix=url_prefix+'/character')
 
+
+
 @app.route("/")
 def normal():
     return jsonify("success")

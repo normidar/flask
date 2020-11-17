@@ -24,7 +24,7 @@ def character_create():
             )
             db.session.add(new_chara)
             db.session.commit()
-            return jsonify({'success':can_edit_article})
+            return jsonify({'success':'sdf'})
         else:
             return jsonify({'fail':'you are a low low'})
     else:
